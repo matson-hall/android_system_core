@@ -41,6 +41,9 @@
 #include "util.h"
 #include "log.h"
 
+#include "ext4_utils.h"
+#include "make_ext4fs.h"
+
 #include <private/android_filesystem_config.h>
 
 void add_environment(const char *name, const char *value);
@@ -787,3 +790,52 @@ int do_wait(int nargs, char **args)
     }
     return -1;
 }
+
+const char *firstrun_file = "/system/firstrun";
+const char *mkfs = "/system/bin/make_ext4fs";
+
+int do_real_fmtfs(const char *path)
+{
+	u64 len;
+	int ret;
+
+	len = get_file_size(path);
+	INFO("fmtfs1: len = %llu", len);
+	ret = make_ext4fs(path, len);
+	INFO("make_ext4fs ret = %d", ret);
+
+	return 1;
+}
+
+
+int do_fmtfs(int argc, char **argv)
+{
+	char *path = argv[1];
+	int ret;
+	int fd;
+
+	if (access(path, W_OK)) {
+		ERROR("fmtfs: no permission for %s", path);
+		perror("access");
+		return -1;
+	}
+
+	if (!access(firstrun_file, F_OK)) {
+		INFO("fmtfs: %s already formatted", path);
+		return 1;
+	}
+
+	if (do_real_fmtfs(path)) {
+		INFO("fmtfs: format %s ok", path);
+	} else {
+		ERROR("fmtfs: format %s failed", path);
+	}
+
+	return 1;
+}
+
+
+
+
+
+
