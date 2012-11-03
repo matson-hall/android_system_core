@@ -98,6 +98,7 @@ int lookup_keyword(const char *s)
         break;
     case 'f':
         if (!strcmp(s, "mtfs")) return K_fmtfs;
+	if(!strcmp(s, "ormat_usrdata"))  return K_format_usrdata;
 	break;
     case 'g':
         if (!strcmp(s, "roup")) return K_group;

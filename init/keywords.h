@@ -33,7 +33,7 @@ int do_loglevel(int nargs, char **args);
 int do_load_persist_props(int nargs, char **args);
 int do_wait(int nargs, char **args);
 int do_fmtfs(int argc, char **argv);
-
+int do_format_usrdata(int nargc,char **argv);
 #define __MAKE_KEYWORD_ENUM__
 #define KEYWORD(symbol, flags, nargs, func) K_##symbol,
 enum {
@@ -88,6 +88,7 @@ enum {
     KEYWORD(loglevel,    COMMAND, 1, do_loglevel)
     KEYWORD(load_persist_props,    COMMAND, 0, do_load_persist_props)
     KEYWORD(ioprio,      OPTION,  0, 0)
+    KEYWORD(format_usrdata,    COMMAND, 1, do_format_usrdata)
 #ifdef __MAKE_KEYWORD_ENUM__
     KEYWORD_COUNT,
 };
